@@ -1,0 +1,144 @@
+.booking-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.booking-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.booking-card-header {
+  background-color: #f9f9f9;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.booking-info h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.booking-date {
+  color: #999;
+  font-size: 13px;
+}
+
+.booking-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background-color: #e8f1f8;
+  color: #2b6cb0;
+}
+
+.status-confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.booking-card-body {
+  padding: 20px;
+}
+
+.booking-detail {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 15px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.booking-detail:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.booking-detail .label {
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.booking-detail .value {
+  color: #333;
+  font-size: 14px;
+}
+
+.booking-detail .notes-value {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.booking-card-footer {
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.cancel-button {
+  padding: 8px 16px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.cancel-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .booking-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .booking-detail {
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .booking-detail .label {
+    font-size: 13px;
+  }
+
+  .booking-detail .value {
+    font-size: 13px;
+  }
+
+  .cancel-button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
