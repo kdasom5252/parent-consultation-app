@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학부모 상담 예약 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-section h2,
+        .booking-list h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .teacher-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-option label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger:hover {
+            background: #ff5252;
+        }
+
+        .error-message {
+            background: #ffe0e0;
+            color: #d63031;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d63031;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #e0ffe0;
+            color: #27ae60;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #27ae60;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .booking-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .booking-card:hover {
+            background: #f0f1fa;
+            transform: translateX(5px);
+        }
+
+        .booking-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .booking-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .booking-card-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .booking-card-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .info-item {
+            color: #555;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 1.1rem;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .teacher-options {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .booking-card-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-section h2,
+            .booking-list h2 {
+                font-size: 1.3rem;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 학부모 상담 예약 시스템</h1>
+            <p>학교 선생님과 편리하게 상담을 예약하세요</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 상담 신청 폼 -->
+            <div class="card form-section">
+                <h2>상담 신청</h2>
+                
+                <div id="errorMessage" class="error-message hidden"></div>
+                <div id="successMessage" class="success-message hidden"></div>
+
+                <form id="consultationForm">
+                    <!-- 학생 정보 -->
+                    <div class="form-group">
+                        <label for="studentName">학생명 *</label>
+                        <input type="text" id="studentName" name="studentName" placeholder="학생의 이름을 입력하세요" required>
+                    </div>
+
+                    <!-- 학부모 정보 -->
+                    <div class="form-group">
+                        <label for="parentName">학부모명 *</label>
+                        <input type="text" id="parentName" name="parentName" placeholder="학부모의 이름을 입력하세요" required>
+                    </div>
+
+                    <!-- 연락처 -->
+                    <div class="form-group">
+                        <label for="phone">연락처 *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" pattern="[0-9\-]{10,13}" required>
+                    </div>
+
+                    <!-- 상담 대상 선택 -->
+                    <div class="form-group">
+                        <label>상담 대상 선택 *</label>
+                        <div class="teacher-options">
+                            <div class="radio-option">
+                                <input type="radio" id="homeroom" name="consultationType" value="homeroom" required>
+                                <label for="homeroom">담임교사</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="subject" name="consultationType" value="subject">
+                                <label for="subject">교과교사</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="counselor" name="consultationType" value="counselor">
+                                <label for="counselor">전문상담교사</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 담임교사 선택 -->
+                    <div id="homeroomContainer" class="form-group hidden">
+                        <label for="homeroomSelect">담임교사 *</label>
+                        <select id="homeroomSelect" name="homeroomSelect">
+                            <option value="">선택하세요</option>
+                            <option value="1학년 1반 담임 (김철수)">1학년 1반 담임 (김철수)</option>
+                            <option value="1학년 2반 담임 (이영희)">1학년 2반 담임 (이영희)</option>
+                            <option value="2학년 1반 담임 (박민준)">2학년 1반 담임 (박민준)</option>
+                            <option value="2학년 2반 담임 (최수진)">2학년 2반 담임 (최수진)</option>
+                            <option value="3학년 1반 담임 (정동욱)">3학년 1반 담임 (정동욱)</option>
+                            <option value="3학년 2반 담임 (우민지)">3학년 2반 담임 (우민지)</option>
+                        </select>
+                    </div>
+
+                    <!-- 교과 선택 -->
+                    <div id="subjectContainer" class="form-group hidden">
+                        <label for="subjectSelect">과목 *</label>
+                        <select id="subjectSelect" name="subjectSelect">
+                            <option value="">과목을 선택하세요</option>
+                            <option value="국어">국어</option>
+                            <option value="영어">영어</option>
+                            <option value="수학">수학</option>
+                            <option value="과학">과학</option>
+                            <option value="사회">사회</option>
+                            <option value="한국사">한국사</option>
+                        </select>
+                    </div>
+
+                    <!-- 교과교사 선택 -->
+                    <div id="teacherContainer" class="form-group hidden">
+                        <label for="teacherSelect">교과 선택 담당 교사 *</label>
+                        <select id="teacherSelect" name="teacherSelect">
+                            <option value="">교사를 선택하세요</option>
+                        </select>
+                    </div>
+
+                    <!-- 전문상담교사 선택 -->
+                    <div id="counselorContainer" class="form-group hidden">
+                        <label for="counselorSelect">전문상담교사 *</label>
+                        <select id="counselorSelect" name="counselorSelect">
+                            <option value="">선택하세요</option>
+                            <option value="전문상담교사 (Wee클래스 오지은)">전문상담교사 (Wee클래스 오지은)</option>
+                            <option value="전문상담교사 (Wee클래스 김정민)">전문상담교사 (Wee클래스 김정민)</option>
+                        </select>
+                    </div>
+
+                    <!-- 상담 날짜 -->
+                    <div class="form-group">
+                        <label for="consultationDate">상담 날짜 *</label>
+                        <input type="date" id="consultationDate" name="consultationDate" required>
+                    </div>
+
+                    <!-- 상담 시간 -->
+                    <div class="form-group">
+                        <label for="consultationTime">상담 시간 *</label>
+                        <input type="time" id="consultationTime" name="consultationTime" required>
+                    </div>
+
+                    <!-- 특이사항 -->
+                    <div class="form-group">
+                        <label for="remarks">특이사항</label>
+                        <textarea id="remarks" name="remarks" placeholder="상담 시 말씀하고 싶은 내용이 있으시면 입력해주세요"></textarea>
+                    </div>
+
+                    <!-- 제출 버튼 -->
+                    <button type="submit" class="btn-primary">상담 신청하기</button>
+                </form>
+            </div>
+
+            <!-- 예약 현황 조회 -->
+            <div class="card booking-list">
+                <h2>📅 예약 현황</h2>
+                <div id="bookingContainer">
+                    <div class="empty-message">
+                        <div class="empty-icon">📋</div>
+                        <p>아직 예약된 상담이 없습니다.<br>왼쪽 폼에서 상담을 신청해주세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 교사 데이터
+        const teacherData = {
+            subject: {
+                "국어": [
+                    "국어 A (정지원)",
+                    "국어 B (강민경)"
+                ],
+                "영어": [
+                    "영어 A (박준호)",
+                    "영어 B (임현정)"
+                ],
+                "수학": [
+                    "수학 A (최성은)",
+                    "수학 B (이대훈)"
+                ],
+                "과학": [
+                    "과학 (나영수)"
+                ],
+                "사회": [
+                    "사회 (김준희)"
+                ],
+                "한국사": [
+                    "한국사 (이수현)"
+                ]
+            }
+        };
+
+        // LocalStorage에서 예약 데이터 불러오기
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        // 폼 요소
+        const form = document.getElementById('consultationForm');
+        const consultationTypeRadios = document.querySelectorAll('input[name="consultationType"]');
+        const homeroomContainer = document.getElementById('homeroomContainer');
+        const subjectContainer = document.getElementById('subjectContainer');
+        const teacherContainer = document.getElementById('teacherContainer');
+        const counselorContainer = document.getElementById('counselorContainer');
+        const subjectSelect = document.getElementById('subjectSelect');
+        const teacherSelect = document.getElementById('teacherSelect');
+        const bookingContainer = document.getElementById('bookingContainer');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        // 최소 날짜 설정 (오늘)
+        const dateInput = document.getElementById('consultationDate');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+
+        // 상담 대상 변경 이벤트
+        consultationTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                updateConsultationOptions();
+            });
+        });
+
+        // 상담 옵션 업데이트
+        function updateConsultationOptions() {
+            const selectedType = document.querySelector('input[name="consultationType"]:checked').value;
+
+            // 모든 컨테이너 숨기기
+            homeroomContainer.classList.add('hidden');
+            subjectContainer.classList.add('hidden');
+            teacherContainer.classList.add('hidden');
+            counselorContainer.classList.add('hidden');
+
+            // 선택한 타입에 따라 표시
+            if (selectedType === 'homeroom') {
+                homeroomContainer.classList.remove('hidden');
+            } else if (selectedType === 'subject') {
+                subjectContainer.classList.remove('hidden');
+                teacherContainer.classList.remove('hidden');
+            } else if (selectedType === 'counselor') {
+                counselorContainer.classList.remove('hidden');
+            }
+        }
+
+        // 과목 변경 시 교사 목록 업데이트
+        subjectSelect.addEventListener('change', function() {
+            const subject = this.value;
+            teacherSelect.innerHTML = '<option value="">교사를 선택하세요</option>';
+
+            if (subject && teacherData.subject[subject]) {
+                teacherData.subject[subject].forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher;
+                    option.textContent = teacher;
+                    teacherSelect.appendChild(option);
+                });
+            }
+        });
+
+        // 폼 제출 이벤트
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 입력값 가져오기
+            const studentName = document.getElementById('studentName').value.trim();
+            const parentName = document.getElementById('parentName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const consultationType = document.querySelector('input[name="consultationType"]:checked').value;
+            const consultationDate = document.getElementById('consultationDate').value;
+            const consultationTime = document.getElementById('consultationTime').value;
+            const remarks = document.getElementById('remarks').value.trim();
+
+            // 선택된 선생님 결정
+            let selectedTeacher = '';
+            if (consultationType === 'homeroom') {
+                selectedTeacher = document.getElementById('homeroomSelect').value;
+            } else if (consultationType === 'subject') {
+                selectedTeacher = document.getElementById('teacherSelect').value;
+            } else if (consultationType === 'counselor') {
+                selectedTeacher = document.getElementById('counselorSelect').value;
+            }
+
+            // 유효성 검사
+            const errors = [];
+
+            if (!studentName) errors.push('학생명을 입력해주세요.');
+            if (!parentName) errors.push('학부모명을 입력해주세요.');
+            if (!phone) errors.push('연락처를 입력해주세요.');
+            if (!selectedTeacher) errors.push('선생님을 선택해주세요.');
+            if (!consultationDate) errors.push('상담 날짜를 선택해주세요.');
+            if (!consultationTime) errors.push('상담 시간을 선택해주세요.');
+
+            // 정규식으로 연락처 형식 확인
+            const phoneRegex = /^[0-9\-]{10,13}$/;
+            if (phone && !phoneRegex.test(phone)) {
+                errors.push('연락처 형식이 올바르지 않습니다. (예: 010-0000-0000)');
+            }
+
+            // 오류 표시
+            if (errors.length > 0) {
+                errorMessage.textContent = errors.join('\n');
+                errorMessage.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+                return;
+            }
+
+            // 오류 메시지 숨기기
+            errorMessage.classList.add('hidden');
+
+            // 새 예약 생성
+            const booking = {
+                id: Date.now(),
+                studentName,
+                parentName,
+                phone,
+                consultationType,
+                selectedTeacher,
+                consultationDate,
+                consultationTime,
+                remarks,
+                createdAt: new Date().toLocaleString('ko-KR')
+            };
+
+            // 예약 목록에 추가
+            bookings.unshift(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            // 성공 메시지 표시
+            successMessage.textContent = `✅ 상담이 신청되었습니다! (${selectedTeacher})`;
+            successMessage.classList.remove('hidden');
+
+            // 폼 초기화
+            form.reset();
+
+            // 상담 옵션 초기화
+            updateConsultationOptions();
+
+            // 예약 목록 업데이트
+            updateBookingList();
+
+            // 5초 후 성공 메시지 숨기기
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 5000);
+        });
+
+        // 예약 목록 업데이트
+        function updateBookingList() {
+            if (bookings.length === 0) {
+                bookingContainer.innerHTML = `
+                    <div class="empty-message">
+                        <div class="empty-icon">📋</div>
+                        <p>아직 예약된 상담이 없습니다.<br>왼쪽 폼에서 상담을 신청해주세요.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            bookingContainer.innerHTML = bookings.map(booking => {
+                const dateObj = new Date(booking.consultationDate);
+                const formattedDate = dateObj.toLocaleDateString('ko-KR', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                return `
+                    <div class="booking-card">
+                        <div class="booking-card-header">
+                            <div class="booking-card-title">${booking.studentName} 학생</div>
+                            <div class="booking-card-date">${formattedDate} ${booking.consultationTime}</div>
+                        </div>
+                        <div class="booking-card-info">
+                            <div class="info-item">
+                                <span class="info-label">선생님:</span> ${booking.selectedTeacher}
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">학부모:</span> ${booking.parentName}
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">연락처:</span> ${booking.phone}
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">신청일:</span> ${booking.createdAt}
+                            </div>
+                        </div>
+                        ${booking.remarks ? `<div class="info-item" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                            <span class="info-label">특이사항:</span> ${booking.remarks}
+                        </div>` : ''}
+                        <button class="btn-danger" onclick="cancelBooking(${booking.id})">예약 취소</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 예약 취소
+        function cancelBooking(id) {
+            if (confirm('정말로 이 예약을 취소하시겠습니까?')) {
+                bookings = bookings.filter(booking => booking.id !== id);
+                localStorage.setItem('bookings', JSON.stringify(bookings));
+                updateBookingList();
+            }
+        }
+
+        // 초기 예약 목록 표시
+        updateBookingList();
+    </script>
+</body>
+</html>
